@@ -50,3 +50,67 @@
 (list 1 2 3 4 5)
 (conj '(1 2 3) 4)
 
+
+
+;; sets
+#{"hannah montana" "mily cyrus" 20 45}
+(conj #{:a :b} :b)
+(conj #{:a :b} #{:b})
+(get #{:a :b} :a)
+(get #{:a :b} :c)
+(:a #{:a :b})
+(:c #{:a :b})
+(get #{:a :b} "hannah montana")
+
+(set [1 2 3 3 3 3 3 3 3 2])
+(get (set [3 3 3 3 3 4 4]) 3)
+(get (set [3 3 3 3 3 4 4]) 5)
+
+(hash-set 1 1 1 1 3 1 2)
+(sorted-set :b :a :c)
+
+
+
+;; symbols & naming
+(def failed-movie-titles ["gone with the moving air" "Swellfellas"])
+(identity 'test)
+(identity 'failed-movie-titles)
+(first failed-movie-titles)
+
+(eval failed-movie-titles)
+(first '(failed-movie-titles 0 1))
+(second '(failed-movie-titles 0 1))
+(second '(failed-movie-titles))
+
+
+
+
+
+;; functions
+(+ 1 2 3 4)
+(* 1 2 3 4)
+(first [1 2 3 4])
+
+(or + -)
+((or + -) 1 2 3 4)
+
+((and (= 1 1) +) 1 2 3)
+((first [+ 0]) 1 2 3)
+
+(1 2 3 4)
+("test" 1 2 3)
+
+(inc 1.1)
+(map inc [0 1 2 3])
+
+
+
+
+
+
+
+
+
+
+
+
