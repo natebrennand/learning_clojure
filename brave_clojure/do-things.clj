@@ -157,8 +157,46 @@
 (weird-arity 3)
 (weird-arity)
 
+;; doesn't compile
+(defn match-arity
+  ([] "test")
+  ([] "test2"))
+(match-arity)
 
 
+(defn codger-communication
+  [whippersnapper]
+  (str "get off my lawn, " whippersnapper "!!!"))
+(defn codger
+  [& whippersnappers]
+  (map codger-communication whippersnappers))
+(codger "billy" "anne", "hulk")
+
+
+(defn fav-things
+  [name & things]
+  (str "hi, " name ", here are a few of my favorite things: " (clojure.string/join ", " things)))
+(fav-things "nate" "python" "go" "clojure")
+
+
+
+;; destructuring arguments
+(defn my-first
+  [[first-thing]]
+  first-thing)
+(my-first ["oven" "bike" "waraxe"]) 
+;; vs non-destructuring
+(defn other-my-first
+  [things]
+  (first things))
+(other-my-first ["oven" "bike" "waraxe"]) 
+
+
+(defn chooser
+  [[first-choice second-choice & unimportant-choices]]
+  (println (str "your 1st choice is: " first-choice))
+  (println (str "your 2nd choice is: " second-choice))
+  (println (str "we're ignoring the rest of your choices: " (clojure.string/join ", " first-choice))))
 
 
 
