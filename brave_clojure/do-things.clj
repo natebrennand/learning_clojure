@@ -102,9 +102,60 @@
 
 (inc 1.1)
 (map inc [0 1 2 3])
+(map inc #{0 1 2 3})
+(set (map inc [0 1 2 3]))
+
+(+ (inc 199) (/ 100 (- 7 2)))
 
 
+;; defining functions
+(defn too-enthusiastic
+  "return a cheer that might be a bit too enthusiastic"
+  [name]
+  (str "Oh. my. god. " name " you're the best"))
+(too-enthusiastic "zelda")
 
+
+;; parameters
+(defn no-params
+  []
+  "i have no params")
+(defn one-param
+  [x]
+  (str "i take one param: " x))
+(defn one-param
+  [x y]
+  (str "i take two params: " x y))
+
+;; overloading through parameter arity
+(defn multi-arity
+  ([first-arg second-arg third-arg]
+   (str "3: " first-arg second-arg third-arg))
+  ([first-arg second-arg]
+   (str "2: " first-arg second-arg))
+  ([first-arg]
+   (str "1: " first-arg)))
+(multi-arity 1 2 3)
+(multi-arity 1 3)
+
+
+(defn x-chop
+  "describe the kind of chop you're inflicting on someone"
+  ([name chop-type]
+   (str "I " chop-type " chop " name "! take that!"))
+  ([name]
+   (x-chop name "karate")))
+(x-chop "kanye" "slap")
+(x-chop "kanye")
+
+;; bad arity solution
+(defn weird-arity
+  ([]
+   "destiny")
+  ([number]
+   (inc number)))
+(weird-arity 3)
+(weird-arity)
 
 
 
