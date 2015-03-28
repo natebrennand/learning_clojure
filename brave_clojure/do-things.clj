@@ -278,19 +278,161 @@
 ;; 4.1 Pulling it all together
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(def asym-hobbit-body-parts [{:name "head" :size 3}
+                             {:name "left-eye" :size 1}
+                             {:name "left-ear" :size 1}
+                             {:name "mouth" :size 1}
+                             {:name "nose" :size 1}
+                             {:name "neck" :size 2}
+                             {:name "left-shoulder" :size 3}
+                             {:name "left-upper-arm" :size 3}
+                             {:name "chest" :size 10}
+                             {:name "back" :size 10}
+                             {:name "left-forearm" :size 3}
+                             {:name "abdomen" :size 6}
+                             {:name "left-kidney" :size 1}
+                             {:name "left-hand" :size 2}
+                             {:name "left-knee" :size 2}
+                             {:name "left-thigh" :size 4}
+                             {:name "left-lower-leg" :size 3}
+                             {:name "left-achilles" :size 1}
+                             {:name "left-foot" :size 2}])
+
+;; but now we need to create their right side!
+
+;; let examples
+(let [[part & remaining] remaining-asym-parts
+       final-body-parts (conj final-body-parts part)]
+  some-stuff)
+
+(let [x 3]
+  x)
+(def dalmation-list
+  ["pongo" "perdita" "puppy 1" "puppy 2"]) ;; missing 97
+(let [dalmations (take 2 dalmation-list)]
+      dalmations)
+
+
+;; let creates a new scope
+(def x 0)
+(let [x 1] x)
+;; however, you can still use the outer scope in your explanation
+(def x 0)
+(let [x 1] x)
+
+;; rest params are usable in let too
+(let [[pongo & dalmations] dalmation-list]
+  [pongo dalmations])
+
+
+(loop [iteration 0]
+  (println (str "iteration: " iteration))
+  (if (> iteration 3)
+    (println "goodbye")
+    (recur (inc iteration))))
+
+
+(defn recursive-printer
+  ([] (recursive-printer 0))
+  ([iteration]
+   (println (str "iteration: " iteration))
+   (if (> iteration 3)
+     (println "goodbye")
+     (recursive-printer (inc iteration)))))
+(recursive-printer)
 
 
 
 
+;; start to actually fix the hobbit!
+(defn needs-matching-part?
+  [part]
+  (re-find #"^left-" (:name part)))
+;; tests
+(needs-matching-part? {:name "left-eye"})
+(needs-matching-part? {:name "neckbeard"})
+
+(defn make-matching-part
+  [part]
+  {:name (clojure.string/replace (:name part) #"^left-" "right-")
+   :size (:size part)})
+;; test
+(make-matching-part {:name "left-eye" :size 1})
+
+
+(defn symmetrize-body-parts
+  "expects a sequence of maps with a :name & :size"
+  [body-parts]
+  (loop [remaining-parts body-parts
+         final-body-parts []]
+    (if (empty? remaining-parts)
+      final-body-parts
+      (let [[part & remaining] remaining-parts
+            final-body-parts (conj final-body-parts part)]
+        (if (needs-matching-part? part)
+          (recur remaining (conj final-body-parts (make-matching-part part)))
+          (recur remaining final-body-parts))))))
+(symmetrize-body-parts asym-hobbit-body-parts)
+
+
+(defn symmetrize-body-parts-2
+  "expects a sequence of maps with a :name & :size"
+  [body-parts]
+  (loop [remaining-parts body-parts
+         final-body-parts []]
+    (if (empty? remaining-parts)
+      final-body-parts
+      (let [[part & remaining] remaining-parts
+            final-body-parts (conj final-body-parts part)]
+        (recur remaining (if (needs-matching-part? part)
+                           (conj final-body-parts (make-matching-part part))
+                           (final-body-parts)))))))
+(map println (symmetrize-body-parts asym-hobbit-body-parts))
+
+
+(let [x [1 2 3 4]]
+  (conj x nil))
 
 
 
 
+;; shortening things w/ reduce
+
+(reduce + [1 2 3 4 5])
+;; analagous to 
+(+ (+ (+ (+ 1 2) 3) 4) 5)
+
+;; can also take an initial arg
+(reduce + 15  [1 2 3 4 5])
+
+
+(defn reduce-symmetrize
+  [body-parts]
+  (reduce (fn [final-body-parts part]
+            (let [final-body-parts (conj final-body-parts part)]
+              (if (needs-matching-part? part)
+                (conj final-body-parts (make-matching-part part))
+                final-body-parts)))
+          []
+          body-parts))
+(map println (reduce-symmetrize asym-hobbit-body-parts))
 
 
 
 
+;; now the hobbits are getting into a fight....
+(defn hit
+  [asym-body-parts]
+  (let [sym-parts (reduce-symmetrize asym-body-parts)
+        body-part-size-sum (reduce + 0 (map :size sym-parts))
+        target (inc (rand body-part-size-sum))]
+    (loop [[part & rest] sym-parts
+           accumulated-size (:size part)]
+      (if (> accumulated-size target)
+        part
+        (recur rest (+ accumulated-size (:size part)))))))
 
+(hit asym-hobbit-body-parts)
 
 
 
