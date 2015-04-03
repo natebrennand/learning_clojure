@@ -23,8 +23,8 @@
     (fn [x]
       (not-any?
         #(divisible? % [x])
-        (range (+ 1 x) (+ 1 n))))
-    (range 1 (+ 1 n))))
+        (range (inc x) (inc n))))
+    (range 1 (inc n))))
 
 (reduce-range 4)
 (reduce-range 10)

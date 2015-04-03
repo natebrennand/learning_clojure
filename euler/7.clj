@@ -15,8 +15,8 @@
   (loop [i 6
          p [2 3 5]]
     (if (= n (.length p))
-      (- i 1)
-      (recur (+ i 1) (if (divisible? i p)
+      (dec i)
+      (recur (inc i) (if (divisible? i p)
                        p
                        (conj p i))))))
 

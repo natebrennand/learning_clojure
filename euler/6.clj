@@ -19,10 +19,10 @@
   (loop [i 0
          sum 0
          square 0]
-    (if (= i (+ n 1))
+    (if (= i (inc n))
       (- (* square square) sum)
       (recur
-        (+ i 1)
+        (inc i)
         (+ sum (* i i))
         (+ square i)))))
 

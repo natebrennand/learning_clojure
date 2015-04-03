@@ -40,12 +40,12 @@
       (= a b (- n 100)) m
       (= b (- n 100)) (recur
                   (max m (if (is-palimdrome? (* a b)) (* a b) m))
-                  (- a 1)
+                  (dec a)
                   n)
       :else (recur
                   (max m (if (is-palimdrome? (* a b)) (* a b) m))
                   a
-                  (- b 1)))))
+                  (dec b)))))
 (largest-palimdrome 999)
 
 
