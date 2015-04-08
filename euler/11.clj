@@ -31,9 +31,49 @@
 
 
 
-(println matrix)
+(defn spots
+  [x y l [a b]]
+  (map
+    (fn [i] [(+ x (* a i))
+             (+ y (* b i))])
+    (range l)))
+
+(defn find-prod
+  [sq-matrix x y l [a b]]
+  (let [spaces (spots x y l [a b])
+        values (map
+                 (fn [[x y]] (get-in sq-matrix [y x] 0))
+                 spaces)]
+    (reduce * values)))
+
+(defn greatest-row
+  [matrix len]
+  (let [l (.length matrix)]
+    (reduce
+      max
+      (flatten (map
+        #(for [x (range l)
+               y (range l)]
+          (find-prod matrix x y len %))
+        [[0 1] [1 0] [1 1] [1 -1]])))))
+
+
+(greatest-row matrix 4)
+; 70600674
 
 
 
 
+
+
+; tests
+(assert
+  (=
+    (spots 2 2 4 [1 1])
+    '([2 2] [3 3] [4 4] [5 5]))
+    "failed to generate spots properly")
+(assert
+  (=
+   (find-prod matrix 2 2 4 [1 1])
+   109089))
 
